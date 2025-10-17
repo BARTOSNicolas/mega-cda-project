@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/src/style.css" />
+    <title>Login</title>
+</head>
+<body>
+    <div class="h-screen flex justify-center items-center">
+        <div class="card w-128 h-128 bg-primary shadow-xl p-8">
+            <h1 class="text-3xl font-bold text-center pb-8">Login</h1>
+            <form action="" method="post" class="mx-auto w-4/5">
+                <div class="mb-4">
+                    <input type="text" id="login" name="login" placeholder="Enter your email" class="input w-full" />
+                </div>
+                <div>
+                    <input type="password" id="password" name="pass" placeholder="Enter your password" class="input w-full" />
+                </div>
+                <div class="flex justify-center mb-4">
+                    <button type="submit" id="btnSubmit" class="btn btn-secondary w-full mt-4" disabled>Login</button>
+                </div>
+                <div id="errors" class="">
+                    <p class="hidden" id="errorPassCar">❌ Le mot de passe doit avoir 8 caractères !</p>
+                    <p class="hidden" id="errorPassNumber">❌ Le mot de passe doit avoir 1 Nombre !</p>
+                    <p class="hidden" id="errorPassMin">❌ Le mot de passe doit avoir une minuscule !</p>
+                    <p class="hidden" id="errorPassMaj">❌ Le mot de passe doit avoir une majuscule !</p>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        const btnSubmit = document.getElementById('btnSubmit');
+        const login = document.getElementById('login');
+        const password = document.getElementById('password');
+
+        let validation = {
+            email: false,
+            password: false
+        }
+
+        login.addEventListener("keyup", (e) => {
+            const isCorrect = checkEmail(e.target.value);
+            if (isCorrect) {
+                login.classList.remove("input-error")
+                login.classList.add("input-success")
+                validation.email = true
+            } else {
+                login.classList.remove("input-success")
+                login.classList.add("input-error")
+                validation.email = false
+            }
+            checkValidation()
+        })
+
+        password.addEventListener("keyup", (e) => {
+            const errorPassCar = document.getElementById('errorPassCar')
+            const errorPassNumber = document.getElementById('errorPassNumber')
+            const errorPassMin = document.getElementById('errorPassMin')
+            const errorPassMaj = document.getElementById('errorPassMaj')
+
+            const isCar = checkPasswordCar(e.target.value);
+            const hasNumber = checkPasswordNumber(e.target.value);
+            const isMin = checkPasswordMin(e.target.value);
+            const isMaj = checkPasswordMaj(e.target.value);
+
+            if (!isCar) {
+                errorPassCar.classList.remove("hidden")
+            } else {
+                errorPassCar.classList.add("hidden")
+            }
+            if (!hasNumber) {
+                errorPassNumber.classList.remove("hidden")
+            } else {
+                errorPassNumber.classList.add("hidden")
+            }
+            if (!isMin) {
+                errorPassMin.classList.remove("hidden")
+            } else {
+                errorPassMin.classList.add("hidden")
+            }
+            if (!isMaj) {
+                errorPassMaj.classList.remove("hidden")
+            } else {
+                errorPassMaj.classList.add("hidden")
+            }
+
+            if (isCar && hasNumber && isMin && isMaj) {
+                password.classList.remove("input-error")
+                password.classList.add("input-success")
+                validation.password = true
+            } else {
+                password.classList.remove("input-success")
+                password.classList.add("input-error")
+                validation.password = false
+            }
+            checkValidation()
+        })
+
+        btnSubmit.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log(login.value, password.value);
+        })
+
+        function checkEmail(login) {
+            const regexEmail = /^[a-z0-9._-]+@[a-z0-9._-]+\.[a-z]{2,6}$/;
+            return regexEmail.test(login);
+        }
+
+        function checkPasswordCar(password) {
+            const regexCar = /^.{8,}$/;
+            return regexCar.test(password);
+        }
+        function checkPasswordNumber(password) {
+            const regexNumber = /[0-9]/;
+            return regexNumber.test(password);
+        }
+        function checkPasswordMin(password) {
+            const regexMin = /[a-z]/;
+            return regexMin.test(password);
+        }
+        function checkPasswordMaj(password) {
+            const regexMaj = /[A-Z]/;
+            return regexMaj.test(password);
+        }
+
+        function checkValidation() {
+            console.log(validation);
+            if (validation.email && validation.password) {
+                btnSubmit.removeAttribute('disabled')
+            }
+        }
+    </script>
+</body>
+</html>
