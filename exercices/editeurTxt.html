@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/src/style.css" />
+    <title>Texte Editeur</title>
+</head>
+<body>
+    <div class="container p-8 mx-auto">
+        <h1 class="text-4xl pb-4">Editeur de texte</h1>
+        <textarea id="editor" class="textarea w-full textarea-lg" rows="10"></textarea>
+    </div>
+
+    <script>
+        const textarea = document.getElementById('editor');
+        // Après le chargement du DOM
+        addEventListener("DOMContentLoaded", () => {
+            // On va chercher la value dans le local storage
+            const text = localStorage.getItem("text")
+            // On mets à jour le textarea avec la value
+            if (text) {
+                textarea.value = text
+            } else {
+                // Sinon Affiche dans le placeholder
+                textarea.setAttribute("placeholder", "Pas de sauvegarde, entrez votre texte")
+            }
+            // Ajout de la couleur au Focus
+            textarea.addEventListener('focus', () => {
+                textarea.classList.add("textarea-primary")
+            })
+            // Suppression de la couleur au Blur (perd le focus)
+            textarea.addEventListener('blur', () => {
+                textarea.classList.remove("textarea-primary")
+            })
+            // Chaque fois que la valeur du textarea change
+            textarea.addEventListener('input', () => {
+                // On met a jour le local storage
+                localStorage.setItem("text", textarea.value)
+            });
+        })
+    </script>
+</body>
+</html>
